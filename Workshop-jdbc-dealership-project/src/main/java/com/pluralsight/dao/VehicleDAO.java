@@ -1,6 +1,6 @@
 package com.pluralsight.dao;
 
-import com.pluralsight.dealership.Vehicle;
+import com.pluralsight.models.Vehicle;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,24 +15,32 @@ public class VehicleDAO {
     }
 
     public void saveVehicle(Vehicle vehicle) throws SQLException {
-        String sql = "INSERT INTO vehicles (VIN, make, model, sold) VALUES (?, ?, ?, ?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1,vehicle.getVin());
-        stmt.setString(2, vehicle.getMake());
-        stmt.setString(3, vehicle.getModel());
-        stmt.setString(4, vehicle.getStatus());
-        stmt.executeUpdate();
+        String sql = "INSERT INTO CT.Vehicles (VIN, make, model, sold) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, vehicle.getVin());
+            stmt.setString(2, vehicle.getMake());
+            stmt.setString(3, vehicle.getModel());
+            stmt.setString(4, vehicle.getStatus());
+            stmt.executeUpdate();
+        }
     }
 
-    public void getVehicleByVIN (String VIN, boolean isSold) throws SQLException {
+    public Vehicle getVehicleByVIN(String VIN) throws SQLException {
         String sql = "SELECT * FROM CT.Vehicles WHERE VIN = ?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, VIN);
-        ResultSet rs = stmt.executeQuery();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, VIN);
+            try (ResultSet rs = stmt.executeQuery()) {
 
-        if (rs.next()) {
-            return new Vehicle(rs.getString("VIN"), rs.getString("make"), rs.getString("model"), rs.getBoolean());
+                if (rs.next()) {
+                    return new Vehicle(
+                            rs.getString("VIN"),
+                            rs.getString("make"),
+                            rs.getString("model"),
+                            rs.getBoolean("sold"));
+                }
+                return null;
+
+            }
         }
-
     }
 }
