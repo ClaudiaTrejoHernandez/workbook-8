@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     private static final String DB_URL = "jdbc:sqlserver://skills4it.database.windows.net:1433;" +
             "database=Courses;" +
-            "user=gtareader@skills4it;" +
-            "password=StrongPass!2025;" +
+            "user=user403;" +
+            "password=YearupSecure2025!;" +
             "encrypt=true;" +
             "trustServerCertificate=false;" +
             "loginTimeout=30;";
