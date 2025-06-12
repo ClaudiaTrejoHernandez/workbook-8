@@ -2,10 +2,14 @@ package com.pluralsight;
 
 import com.pluralsight.utilities.DealershipMenu;
 
-public class Main {
-    public static void main(String[] args) {
+import java.sql.SQLException;
 
-        DealershipMenu.userMenu();
+public class Main {
+    public static void main(String[] args) throws SQLException {
+
+
+        DealershipMenu dealershipMenu = new DealershipMenu();
+        dealershipMenu.displayDealershipMenu();
 
 
     }
