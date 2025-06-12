@@ -17,7 +17,7 @@ public class VehicleDAO {
 
     public List<Vehicle> getByPriceRange (double min, double max) throws SQLException {
 
-//Making a query in Java
+//Making the query:
         String sql = "SELECT * FROM CT.vehicles WHERE price BETWEEN ? AND ?";
         List<Vehicle> results = new ArrayList<>();
 
@@ -39,15 +39,162 @@ public class VehicleDAO {
                             rs.getBoolean("sold")
                     ));
                 }
-
             }
-
         }
         return results;
 
     }
 
-    public void saveVehicle(Vehicle vehicle) throws SQLException {
+
+    public List<Vehicle> getByMakeModel(String make, String model, boolean matchEither) throws SQLException {
+
+//Making the query:
+        String joinWith = matchEither ? "OR" : "AND";
+        String sql = "SELECT * FROM CT.vehicles WHERE make LIKE ?" + joinWith + " model LIKE ?";
+        List<Vehicle> results = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + make + "%");
+            stmt.setString(2, "%" + model + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    results.add(new Vehicle(
+                            rs.getString("VIN"),
+                            rs.getString("make"),
+                            rs.getString("model"),
+                            rs.getInt("year"),
+                            rs.getString("color"),
+                            rs.getInt("odometer"),
+                            rs.getDouble("price"),
+                            rs.getString("vehicle_Type"),
+                            rs.getBoolean("sold")
+                    ));
+
+                }
+            }
+        }
+
+        return results;
+    }
+
+    public List<Vehicle> getByYear(int year) throws SQLException {
+
+        //Making the query:
+        String sql = "SELECT * FROM CT.vehicles WHERE year = ?";
+        List<Vehicle> results = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDouble(1, year);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    results.add(new Vehicle(
+                            rs.getString("VIN"),
+                            rs.getString("make"),
+                            rs.getString("model"),
+                            rs.getInt("year"),
+                            rs.getString("color"),
+                            rs.getInt("odometer"),
+                            rs.getDouble("price"),
+                            rs.getString("vehicle_Type"),
+                            rs.getBoolean("sold")
+                    ));
+                }
+            }
+        }
+        return results;
+    }
+
+    public List<Vehicle> getByColor(String color) throws SQLException {
+
+//Making the query:
+        String sql = "SELECT * FROM CT.vehicles WHERE color LIKE ?";
+        List<Vehicle> results = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + color + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    results.add(new Vehicle(
+                            rs.getString("VIN"),
+                            rs.getString("make"),
+                            rs.getString("model"),
+                            rs.getInt("year"),
+                            rs.getString("color"),
+                            rs.getInt("odometer"),
+                            rs.getDouble("price"),
+                            rs.getString("vehicle_Type"),
+                            rs.getBoolean("sold")
+                    ));
+                }
+            }
+
+        }
+        return results;
+    }
+
+    public List<Vehicle> getByMileage(int min, int max) throws SQLException {
+
+        //Making the query:
+        String sql = "SELECT * FROM CT.vehicles WHERE odometer BETWEEN ? AND ?";
+        List<Vehicle> results = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDouble(1, min);
+            stmt.setDouble(2, max);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    results.add(new Vehicle(
+                            rs.getString("VIN"),
+                            rs.getString("make"),
+                            rs.getString("model"),
+                            rs.getInt("year"),
+                            rs.getString("color"),
+                            rs.getInt("odometer"),
+                            rs.getDouble("price"),
+                            rs.getString("vehicle_Type"),
+                            rs.getBoolean("sold")
+                    ));
+                }
+            }
+        }
+        return results;
+    }
+
+    public List<Vehicle> getByVehicleType(String vehicleType) throws SQLException {
+
+//Making the query:
+        String sql = "SELECT * FROM CT.vehicles WHERE vehicle_type LIKE ?";
+        List<Vehicle> results = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + vehicleType  + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    results.add(new Vehicle(
+                            rs.getString("VIN"),
+                            rs.getString("make"),
+                            rs.getString("model"),
+                            rs.getInt("year"),
+                            rs.getString("color"),
+                            rs.getInt("odometer"),
+                            rs.getDouble("price"),
+                            rs.getString("vehicle_Type"),
+                            rs.getBoolean("sold")
+                    ));
+                }
+            }
+
+        }
+        return results;
+    }
+
+
+    public List<Vehicle> saveVehicle(Vehicle vehicle) throws SQLException {
         String sql = "INSERT INTO CT.Vehicles (VIN, make, model, sold) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, vehicle.getVin());
@@ -56,39 +203,7 @@ public class VehicleDAO {
             stmt.setString(4, vehicle.getStatus());
             stmt.executeUpdate();
         }
+        return null;
     }
 
-    public void getByMakeModel() {
-    }
-
-    public void getByYear() {
-    }
-
-    public void getByColor() {
-    }
-
-    public void getByMileage() {
-    }
-
-    public void getByVehicleType() {
-    }
-
-//    public Vehicle getVehicleByVIN(String VIN) throws SQLException {
-//        String sql = "SELECT * FROM CT.Vehicles WHERE VIN = ?";
-//        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-//            stmt.setString(1, VIN);
-//            try (ResultSet rs = stmt.executeQuery()) {
-//
-//                if (rs.next()) {
-//                    return new Vehicle(
-//                            rs.getString("VIN"),
-//                            rs.getString("make"),
-//                            rs.getString("model"),
-//                            rs.getBoolean("sold"));
-//                }
-//                return null;
-//
-//            }
-//        }
-//    }
 }
