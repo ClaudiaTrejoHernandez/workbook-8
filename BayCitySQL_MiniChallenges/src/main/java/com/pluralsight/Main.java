@@ -39,7 +39,6 @@ public class Main {
                 case 0 -> System.exit(0);
                 default -> System.out.println("Invalid choice.");
 
-
             }
         }
     }
