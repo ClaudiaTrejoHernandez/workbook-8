@@ -2,6 +2,7 @@ package com.pluralsight.models;
 
 public class Vehicle {
 
+    private int vehicleID;
     private String vin;
     private String make;
     private String model;
@@ -11,9 +12,24 @@ public class Vehicle {
     private double price;
     private String vehicleType;
 
-    private boolean sold = false;
+    private boolean sold;
 
-    public Vehicle(String vin, String make, String model, int year, String color, int odometer, double price, String vehicleType, boolean isSold) {
+//Constructor to add new vehicles
+public Vehicle(String vin, String make, String model, int year, String color, int odometer, double price, String vehicleType, boolean isSold) {
+    this.vin = vin;
+    this.make = make;
+    this.model = model;
+    this.year = year;
+    this.color = color;
+    this.odometer = odometer;
+    this.price = price;
+    this.vehicleType = vehicleType;
+    this.sold = isSold;
+}
+
+//Constructor to load from the database:
+    public Vehicle(int vehicleID, String vin, String make, String model, int year, String color, int odometer, double price, String vehicleType, boolean isSold) {
+        this.vehicleID = vehicleID;
         this.vin = vin;
         this.make = make;
         this.model = model;
@@ -23,6 +39,14 @@ public class Vehicle {
         this.price = price;
         this.vehicleType = vehicleType;
         this.sold = isSold;
+    }
+
+    public int getVehicleID() {
+        return vehicleID;
+    }
+
+    public void setVehicleID(int vehicleID) {
+        this.vehicleID = vehicleID;
     }
 
     public String getVin() {
@@ -104,8 +128,8 @@ public class Vehicle {
     @Override
     public String toString() {
         return String.format(
-                "Status: %-9s | VIN: %-10s | Make: %-10s | Model: %-10s | Year: %-4d | Color: %-10s | Odometer: %,8d mi | Price: $%,10.2f | Type: %-10s",
-                getStatus(), vin, make, model, year, color, odometer, price, vehicleType);
+                "Status: %-9s | VehicleID: %-4d | VIN: %-10s | Make: %-10s | Model: %-10s | Year: %-4d | Color: %-10s | Odometer: %,8d mi | Price: $%,10.2f | Type: %-10s",
+                getStatus(),vehicleID, vin, make, model, year, color, odometer, price, vehicleType);
     }
 
 }
