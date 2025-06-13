@@ -3,6 +3,7 @@ package com.pluralsight.utilities;
 import com.pluralsight.dao.VehicleDAO;
 import com.pluralsight.models.Vehicle;
 
+import javax.xml.transform.Source;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
@@ -46,8 +47,9 @@ public class DealershipMenu {
                 case 6 -> searchByVehicleType();
                 case 7 -> viewAllVehicles();
                 case 8 -> addVehicle();
-                case 9 -> sellVehicle();
-                case 10 -> leaseVehicle();
+                case 9 -> removeVehicle();
+                case 10-> sellVehicle();
+                case 11 -> leaseVehicle();
                 case 0 -> System.exit(0);
                 default -> System.out.println("Invalid choice.");
             }
@@ -181,7 +183,54 @@ public class DealershipMenu {
     private void viewAllVehicles() {
     }
 
-    private void addVehicle() {
+    private void addVehicle() throws SQLException {
+        System.out.println("Let's add your vehicle: \n");
+
+        System.out.println("Enter the VIN: ");
+        String vin = read.nextLine();
+
+        System.out.println("Enter the Make: ");
+        String make = read.nextLine();
+
+        System.out.println("Enter the Model: ");
+        String model = read.nextLine();
+
+        System.out.println("Enter the year: ");
+        int year = read.nextInt();
+        read.nextLine();
+
+        System.out.println("Enter the Color: ");
+        String color = read.nextLine();
+
+        System.out.println("Enter the current Mileage: ");
+        int odometer = read.nextInt();
+        read.nextLine();
+
+        System.out.println("Enter the Price: ");
+        double price = read.nextDouble();
+        read.nextLine();
+
+        System.out.println("Enter the Vehicle Type: ");
+        String vehicleType = read.nextLine();
+
+        Vehicle vehicle = new Vehicle(vin, make, model, year, color, odometer, price, vehicleType, false);
+
+        vehicleDAO.saveVehicle(vehicle);
+
+        System.out.println("\n✅ Vehicle added successfully!");
+
+    }
+
+    public void removeVehicle() throws SQLException {
+        System.out.println("\nLet's remove a vehicle by VehicleID: ");
+
+        System.out.println("Enter VehicleID: ");
+        int vehicleID = read.nextInt();
+        read.nextLine();
+
+        vehicleDAO.deleteVehicle(vehicleID);
+
+        System.out.printf("✅ Vehicle #%d was removed successfully!\n", vehicleID);
 
     }
 
