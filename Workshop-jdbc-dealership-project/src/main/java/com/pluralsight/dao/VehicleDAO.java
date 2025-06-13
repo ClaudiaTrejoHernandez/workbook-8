@@ -28,6 +28,7 @@ public class VehicleDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     results.add(new Vehicle(
+                            rs.getInt("vehicle_id"),
                             rs.getString("VIN"),
                             rs.getString("make"),
                             rs.getString("model"),
@@ -60,6 +61,7 @@ public class VehicleDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     results.add(new Vehicle(
+                            rs.getInt("vehicle_id"),
                             rs.getString("VIN"),
                             rs.getString("make"),
                             rs.getString("model"),
@@ -90,6 +92,7 @@ public class VehicleDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     results.add(new Vehicle(
+                            rs.getInt("vehicle_id"),
                             rs.getString("VIN"),
                             rs.getString("make"),
                             rs.getString("model"),
@@ -118,6 +121,7 @@ public class VehicleDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     results.add(new Vehicle(
+                            rs.getInt("vehicle_id"),
                             rs.getString("VIN"),
                             rs.getString("make"),
                             rs.getString("model"),
@@ -148,6 +152,7 @@ public class VehicleDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     results.add(new Vehicle(
+                            rs.getInt("vehicle_id"),
                             rs.getString("VIN"),
                             rs.getString("make"),
                             rs.getString("model"),
@@ -176,6 +181,7 @@ public class VehicleDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     results.add(new Vehicle(
+                            rs.getInt("vehicle_id"),
                             rs.getString("VIN"),
                             rs.getString("make"),
                             rs.getString("model"),
@@ -194,16 +200,33 @@ public class VehicleDAO {
     }
 
 
-    public List<Vehicle> saveVehicle(Vehicle vehicle) throws SQLException {
-        String sql = "INSERT INTO CT.Vehicles (VIN, make, model, sold) VALUES (?, ?, ?, ?)";
+    public void saveVehicle(Vehicle vehicle) throws SQLException {
+        vehicle.setSold(false);
+
+        String sql = "INSERT INTO CT.vehicles (VIN, make, model, year, color, odometer, price, vehicle_type, sold) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, vehicle.getVin());
             stmt.setString(2, vehicle.getMake());
             stmt.setString(3, vehicle.getModel());
-            stmt.setString(4, vehicle.getStatus());
+            stmt.setInt(4, vehicle.getYear());
+            stmt.setString(5, vehicle.getColor());
+            stmt.setInt(6, vehicle.getOdometer());
+            stmt.setDouble(7, vehicle.getPrice());
+            stmt.setString(8, vehicle.getVehicleType());
+            stmt.setBoolean(9, vehicle.isSold());
             stmt.executeUpdate();
         }
-        return null;
+
+    }
+
+    public void deleteVehicle(int vehicle_id) throws SQLException {
+        String sql = "DELETE FROM CT.vehicles WHERE vehicle_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, vehicle_id);
+            stmt.executeUpdate();
+
+        }
+
     }
 
 }
